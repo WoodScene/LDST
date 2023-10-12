@@ -37,7 +37,7 @@ This should take ~30 hours to train on a single Nvidia 3090 GPU. At the end of t
 You can load the weights that we have provided directly from the `\checkpoint` folder, and make inference.
 
 Zero-shot setting inference:
-```
+```ruby
 CUDA_VISIBLE_DEVICES=0 python generate_zero-shot.py \
     --load_8bit \
     --base_model 'decapoda-research/llama-7b-hf' \
@@ -50,7 +50,7 @@ CUDA_VISIBLE_DEVICES=0 python generate_zero-shot.py \
 * --except_domain: indicates the unseen domains during training which is the only different parameter between zero-shot inference and few-shot inference.
 
 Few-shot setting inference:
-```
+```ruby
 CUDA_VISIBLE_DEVICES=0 python generate_few-shot.py \
     --load_8bit \
     --base_model 'decapoda-research/llama-7b-hf' \
@@ -75,7 +75,7 @@ If the slot is not mentioned in the dialogue, just return NONE. So the value of 
 
 ## Citation
 If you use our data or code in your work, please kindly cite our work as:
-```
+```ruby
 @inproceedings{feng-etal-2023-ldst,
     title = "Towards LLM-driven Dialogue State Tracking",
     author = "Feng, Yujie  and
