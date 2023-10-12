@@ -1,5 +1,5 @@
 # LLM-driven Dialogue State Tracking
-Thank you for your interest in our work, and this is the original implementation of "Towards LLM-driven Dialogue State Tracking", accepted to EMNLP 2023.
+Thank you for your interest in our work, and this is the original implementation of "Towards LLM-driven Dialogue State Tracking".
 
 ## Local Setup
 ```
@@ -17,7 +17,7 @@ We use the data processing script provided by [DST-as-Prompting](https://github.
 
 
 ## Trainnig (`finetune.py`)
-```ruby
+```
 WORLD_SIZE=4 CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun \
 --nproc_per_node=4 \
 --master_port=1234 \
@@ -37,7 +37,7 @@ This should take ~30 hours to train on a single Nvidia 3090 GPU. At the end of t
 You can load the weights that we have provided directly from the `\checkpoint` folder, and make inference.
 
 Zero-shot setting inference:
-```ruby
+```
 CUDA_VISIBLE_DEVICES=0 python generate_zero-shot.py \
     --load_8bit \
     --base_model 'decapoda-research/llama-7b-hf' \
@@ -50,7 +50,7 @@ CUDA_VISIBLE_DEVICES=0 python generate_zero-shot.py \
 * --except_domain: indicates the unseen domains during training which is the only different parameter between zero-shot inference and few-shot inference.
 
 Few-shot setting inference:
-```ruby
+```
 CUDA_VISIBLE_DEVICES=0 python generate_few-shot.py \
     --load_8bit \
     --base_model 'decapoda-research/llama-7b-hf' \
@@ -71,22 +71,3 @@ If the slot is not mentioned in the dialogue, just return NONE. So the value of 
 
 
 **LDST Ouput:** East
-
-
-## Citation
-If you use our data or code in your work, please kindly cite our work as:
-```ruby
-@inproceedings{feng-etal-2023-ldst,
-    title = "Towards LLM-driven Dialogue State Tracking",
-    author = "Feng, Yujie  and
-      Lu, Zexin  and
-      Liu, Bo  and
-      Zhan, Liming and
-      Wu, Xiaoming",
-    booktitle = "Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
-    month = dec,
-    year = "2023",
-    address = "Singapore",
-    publisher = "Association for Computational Linguistics",
-}
-```
