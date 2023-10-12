@@ -71,3 +71,22 @@ If the slot is not mentioned in the dialogue, just return NONE. So the value of 
 
 
 **LDST Ouput:** East
+
+
+## Citation
+If you use our data or code in your work, please kindly cite our work as:
+```
+@inproceedings{feng-etal-2023-ldst,
+    title = "Towards LLM-driven Dialogue State Tracking",
+    author = "Feng, Yujie  and
+      Lu, Zexin  and
+      Liu, Bo  and
+      Zhan, Liming and
+      Wu, Xiaoming",
+    booktitle = "Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
+    month = dec,
+    year = "2023",
+    address = "Singapore",
+    publisher = "Association for Computational Linguistics",
+}
+```
