@@ -13,7 +13,7 @@ The two benchmark Datasets can be downloaded at:
 * MultiWOZ: https://github.com/budzianowski/multiwoz
 * SGD Dataset: https://github.com/google-research-datasets/dstc8-schema-guided-dialogue
 
-We use the data processing script provided by [DST-as-Prompting](https://github.com/chiahsuan156/DST-as-Prompting) for data pre-processing and post-processing.
+We use the data processing script provided by [DST-as-Prompting](https://github.com/chiahsuan156/DST-as-Prompting) for data pre-processing, post-processing and evaluation.
 
 
 ## Trainnig (`finetune.py`)
