@@ -1,5 +1,5 @@
 # LLM-driven Dialogue State Tracking
-Thank you for your interest in our work, and this is the original implementation of "Towards LLM-driven Dialogue State Tracking".
+Thank you for your interest in our work, and this is the original implementation of "Towards LLM-driven Dialogue State Tracking", accepted to EMNLP 2023.
 
 ## Local Setup
 ```
@@ -13,11 +13,11 @@ The two benchmark Datasets can be downloaded at:
 * MultiWOZ: https://github.com/budzianowski/multiwoz
 * SGD Dataset: https://github.com/google-research-datasets/dstc8-schema-guided-dialogue
 
-We use the data processing script provided by [DST-as-Prompting](https://github.com/chiahsuan156/DST-as-Prompting) for data pre-processing and post-processing.
+We use the data processing script provided by [DST-as-Prompting](https://github.com/chiahsuan156/DST-as-Prompting) for data pre-processing, post-processing and evaluation.
 
 
 ## Trainnig (`finetune.py`)
-```
+```ruby
 WORLD_SIZE=4 CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun \
 --nproc_per_node=4 \
 --master_port=1234 \
@@ -37,7 +37,7 @@ This should take ~30 hours to train on a single Nvidia 3090 GPU. At the end of t
 You can load the weights that we have provided directly from the `\checkpoint` folder, and make inference.
 
 Zero-shot setting inference:
-```
+```ruby
 CUDA_VISIBLE_DEVICES=0 python generate_zero-shot.py \
     --load_8bit \
     --base_model 'decapoda-research/llama-7b-hf' \
@@ -50,7 +50,7 @@ CUDA_VISIBLE_DEVICES=0 python generate_zero-shot.py \
 * --except_domain: indicates the unseen domains during training which is the only different parameter between zero-shot inference and few-shot inference.
 
 Few-shot setting inference:
-```
+```ruby
 CUDA_VISIBLE_DEVICES=0 python generate_few-shot.py \
     --load_8bit \
     --base_model 'decapoda-research/llama-7b-hf' \
@@ -61,7 +61,7 @@ CUDA_VISIBLE_DEVICES=0 python generate_few-shot.py \
 ```
 
 ## Checkpoint files
-We provide all the pre-training weights in the `Checkpoint_files` folder.
+We provide all the fine-tuning weights in the `Checkpoint_files` folder.
 
 ## Example output
 **Instruction:** Track the state of the slot <hotel-area> in the input dialogue.
