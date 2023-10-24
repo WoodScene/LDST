@@ -1,9 +1,4 @@
 
-# instruction + input + output
-
-# zero-shot experiment
-
-
 
 import random
 import json
@@ -17,13 +12,13 @@ def Template1(dial_text):
     if "Possible Values" in dial[1]:
         dial2 = dial[1].split(" [Possible Values] ")
         
-        input1 = input1 + "[domain] " + dial2[0] + " "
+        input1 = input1 + "[domain] " + dial2[0] + ". "
         if random.random() > 0.5:
             input1 = input1 + "This slot is categorical and you can only choose from the following available values: "
             input1 = input1 + dial2[1] + ". "
         
     else:
-        input1 = input1 + "[domain] " + dial[1] + " "
+        input1 = input1 + "[domain] " + dial[1] + ". "
 
     input1 = input1 + "If the slot is not mentioned in the dialogue, just return NONE. \n "
     
@@ -36,6 +31,7 @@ def Template1(dial_text):
     return input1, output1
 
 
+
 def Template2(dial_text):
     dial = dial_text['dialogue'].split(" [domain] ")
     input1 = ""
@@ -44,13 +40,13 @@ def Template2(dial_text):
     if "Possible Values" in dial[1]:
         dial2 = dial[1].split(" [Possible Values] ")
         
-        input1 = input1 + "[domain] " + dial2[0] + " "
+        input1 = input1 + "[domain] " + dial2[0] + ". "
         if random.random() > 0.5:
             input1 = input1 + "This slot is categorical and you can only choose from the following available values: "
             input1 = input1 + dial2[1] + ". "
         
     else:
-        input1 = input1 + "[domain] " + dial[1] + " "
+        input1 = input1 + "[domain] " + dial[1] + ". "
 
     input1 = input1 + "\n "
     if random.random() > 0.5:
@@ -74,22 +70,28 @@ def Template3(dial_text):
     output1 = dial_text['state']
     return input1, output1
 
+def Count_activate_state_number():
+    data_dir = "./SGD_preprocess/"+ "train" +".json"
+    test_data_lines = open(data_dir).readlines()
+    activate_number = 0
+    for idx_ in range(len(test_data_lines)):
+        dial_text = eval(test_data_lines[idx_].strip())
+        if dial_text['state'] != "NONE":
+            activate_number += 1
+    return activate_number
 
 if __name__ == '__main__':
-    frame_idxs = {"train": 0, "taxi":1, "bus":2, "police":3, "hotel":4, "restaurant":5, "attraction":6, "hospital":7}
-    # 2.0 ['hotel', 'train', 'attraction', 'restaurant', 'hospital', 'taxi', 'bus']
-    # 从 train taxi hotel  restaurant attraction 中选择一个作为测试的domain
-
-    except_domain = "attraction" # delete this domain from traning set
-    activate_number = 471912
+    # 1 5 10 25
+    few_shot_ratio = 1
+    #activate_number = Count_activate_state_number() # 非none state的样本数
+    activate_number = 86367
+    print(f"非none state的样本数为{activate_number}")
     
-    except_number = 0
-    original_number = 0
     for data_type in ["train"]:
-        data_dir = "./MULTIWOZ20_preprocess/"+ data_type +".json"
-        data_idx = "./MULTIWOZ20_preprocess/"+ data_type +".idx"
+        data_dir = "./SGD_preprocess/"+ data_type +".json"
+        data_idx = "./SGD_preprocess/"+ data_type +".idx"
         
-        output_filename = "./MULTIWOZ20_preprocess/"+ data_type +"_LLM_zero-shot_except-"+ str(except_domain) +"-domain.json"
+        output_filename = "./SGD_preprocess/"+ data_type +"_LLM_few-shot-"+ str(few_shot_ratio) +"percent.json"
         dataset_data = []
         
         idx_lines = open(data_idx).readlines()
@@ -97,26 +99,35 @@ if __name__ == '__main__':
         
         assert len(idx_lines) == len(test_data_lines)
         
-        none_sample_number = len(idx_lines) - activate_number
-        none_sample_select_ratio = round((activate_number/none_sample_number),3)
-        print(f"从none的样本中，以{none_sample_select_ratio}的概率进行挑选，从而保证二者的数量均衡")
+        total_select_number = int(len(idx_lines)*few_shot_ratio/100)
+        print(f"样本总数是{len(idx_lines)}，需要从中选{total_select_number}个样本")
+        
+        
+        select_none_number = int(total_select_number/2)
+        select_activate_number = total_select_number -select_none_number
+        if select_activate_number > activate_number:
+            select_activate_number = activate_number
+            select_none_number = total_select_number - activate_number
+        print(f"其中是none的样本选{select_none_number}个，非none的样本选{select_activate_number}个")
+        
+        select_none_ratio = round(select_none_number/(len(idx_lines) - activate_number),5)
+        select_activate_ratio = round(select_activate_number/activate_number,5)
+        print(f"所以，需要以{select_none_ratio}的概率从none的state中挑选样本，以{select_activate_ratio}的概率从非none的state中挑选样本")
         #sys.exit(1)
+        
         for idx_ in range(len(idx_lines)):
             dial_text = eval(test_data_lines[idx_].strip())
             #print(dial_text['dialogue'])
             if dial_text['state'] == "NONE":
-                if random.random() > none_sample_select_ratio:
+                if random.random() > select_none_ratio:
+                    continue
+            else:
+                if random.random() > select_activate_ratio:
                     continue
             
-            original_number += 1
             item = {}
             idx_list = idx_lines[idx_].strip()
             dial_json_n, dial_idx, turn_idx, frame_idx, d_name, s_name = idx_list.split("|||") 
-
-            if d_name == except_domain:
-                except_number +=1 
-                continue
-
             if random.random() > 0.1:
                 instru = "Track the state of the slot in the input dialogue."
             else:
@@ -138,8 +149,6 @@ if __name__ == '__main__':
             item['instruction'] = instru
             item['input'] = input1
             item['output'] = output1
-            # if random.random() > 0.8:
-            #     dataset_data.append(item)
             dataset_data.append(item)
             #print(item)
             #break
@@ -148,4 +157,4 @@ if __name__ == '__main__':
         with open(output_filename, 'w') as f:
             json.dump(dataset_data, f, indent=4)    
     print("done.")
-    print(f"原本的样本数量为：{original_number}。被删掉的样本数量为：{except_number}。最终该训练集的样本总数为：{len(dataset_data)}")
+    print(f"最终该训练集的样本总数为：{len(dataset_data)}")

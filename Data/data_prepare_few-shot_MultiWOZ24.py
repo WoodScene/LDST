@@ -4,7 +4,6 @@
 import random
 import json
 import sys
-random.seed(42)
 
 
 def Template1(dial_text):

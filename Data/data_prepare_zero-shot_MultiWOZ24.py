@@ -2,7 +2,6 @@
 import random
 import json
 import sys
-random.seed(42)
 
 def Template1(dial_text):
     dial = dial_text['dialogue'].split(" [domain] ")
