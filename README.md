@@ -23,8 +23,8 @@ WORLD_SIZE=4 CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun \
 --master_port=1234 \
 finetune.py \
 --base_model 'decapoda-research/llama-7b-hf' \
---data_path './Data/MultiWOZ2_3_preprocess/train_LLM_few-shot-25percent.json' \
---output_dir './LDST_MULTIWOZ23_few-shot_25percent' \
+--data_path './Data/MultiWOZ_2.2_preprocess/train_LLM_few-shot-1percent.json' \
+--output_dir './LDST_MULTIWOZ22_few-shot_1percent' \
 --num_epochs=2 \
 --cutoff_len=512 \
 --group_by_length \
