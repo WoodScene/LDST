@@ -60,6 +60,15 @@ CUDA_VISIBLE_DEVICES=0 python generate_few-shot.py \
     --output_file './LDST_result_MULTIWOZ24_few-shot-1percent/test_LLM_result.txt' 
 ```
 
+## Evaluation
+```ruby
+python postprocess.py --data_dir "$DATA_DIR" --out_dir "$DATA_DIR/dummy/" --test_idx "$DATA_DIR/test.idx" \
+    --prediction_txt "$output_dir/generated_predictions.txt"
+
+python eval.py --data_dir "$DATA_DIR" --prediction_dir "$DATA_DIR/dummy/" \
+    --output_metric_file "$DATA_DIR/dummy/prediction_score"
+```
+
 ## Checkpoint files
 We provide all the fine-tuning weights in the `Checkpoint_files` folder.
 
