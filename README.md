@@ -64,10 +64,10 @@ CUDA_VISIBLE_DEVICES=0 python generate_few-shot.py \
 We provide all the fine-tuning weights in the `Checkpoint_files` folder.
 
 ## Example output
-**Instruction:** Track the state of the slot <hotel-area> in the input dialogue.
+**Instruction:** Track the state of the slot \<hotel-area\> in the input dialogue.
 
 **Input:** [USER] I need to book a hotel in the east that has 4 stars. [SYSTEM] I can help you with that. What is your price range? [domain] hotel, [slot] area, it indicates area or place of the hotel. This slot is categorical and you can only choose from the following available values: centre, east, north, south, west.
-If the slot is not mentioned in the dialogue, just return NONE. So the value of slot <hotel-area> is
+If the slot is not mentioned in the dialogue, just return NONE. So the value of slot \<hotel-area\> is
 
 
 **LDST Ouput:** East
